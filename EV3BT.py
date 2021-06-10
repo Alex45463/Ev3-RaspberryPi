@@ -44,8 +44,12 @@ def decodeMessage(s, msgType):
             raise BufferError('Value size is not four bytes required for Numeric Type')
         value = struct.unpack_from('<f', s, 9 + mailSize)[0]
     else:
-        valueBytes = struct.unpack_from('<' + str(valueSize) + 's', s, 9 + mailSize)[0] value = valueBytes.decode('ascii')[:-1] remnant = None if len(s) > (payloadSize + 2):
-        remnant = s[(payloadSize) + 2:]
+        valueBytes = struct.unpack_from('<' + str(valueSize) + 's', s, 9 + mailSize)[0]
+	value = valueBytes.decode('ascii')[:-1]
+        
+    remnant = None
+    if len(s) > (payloadSize + 2):
+	remnant = s[(payloadSize) + 2:]
         
     return (mail, value, remnant)
 
